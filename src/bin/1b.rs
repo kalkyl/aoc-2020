@@ -2,7 +2,7 @@ use std::fs::File;
 use std::io::{BufRead, BufReader, Error, ErrorKind, Read};
 
 const FILE: &str = "./input/1.txt";
-const SUM: i32 = 3030;
+const SUM: i32 = 2020;
 
 fn read_lines<R: Read>(io: R) -> Result<Vec<i32>, Error> {
     BufReader::new(io)
