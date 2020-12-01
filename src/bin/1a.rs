@@ -7,24 +7,21 @@ const SUM: i32 = 2020;
 fn read_lines<R: Read>(io: R) -> Result<Vec<i32>, Error> {
     BufReader::new(io)
         .lines()
-        .map(|line| line.and_then(|v| v.parse().map_err(|e| Error::new(ErrorKind::InvalidData, e))))
+        .map(|l| l.and_then(|v| v.parse().map_err(|e| Error::new(ErrorKind::InvalidData, e))))
         .collect()
 }
 
 fn main() -> Result<(), Error> {
-    let vec = read_lines(File::open(FILE)?)?;
-    let p = vec
-        .iter()
-        .enumerate()
-        .find_map(|(i, &x)| {
-            vec.iter()
-                .skip(i + 1)
-                .find(|&y| x + y == SUM)
-                .map(|&y| (x, y))
-        })
-        .map(|(x, y)| x * y);
+    let expenses = read_lines(File::open(FILE)?)?;
+    let result = expenses.iter().enumerate().find_map(|(i, &x)| {
+        expenses
+            .iter()
+            .skip(i + 1)
+            .find(|&y| x + y == SUM)
+            .map(|&y| x * y)
+    });
 
-    match p {
+    match result {
         Some(n) => println!("{:?}", n),
         None => println!("No combination found!"),
     }
