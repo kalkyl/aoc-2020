@@ -28,13 +28,8 @@ impl<'a> Password<'a> {
         }
     }
     fn is_valid(&self) -> bool {
-        self.password
-            .char_indices()
-            .filter(|&(i, c)| {
-                c == self.policy.letter && (i == self.policy.a - 1 || i == self.policy.b - 1)
-            })
-            .count()
-            == 1
+        (self.password.chars().nth(self.policy.a - 1) == Some(self.policy.letter))
+            ^ (self.password.chars().nth(self.policy.b - 1) == Some(self.policy.letter))
     }
 }
 
