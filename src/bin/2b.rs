@@ -1,5 +1,5 @@
 use std::fs::File;
-use std::io::{BufRead, BufReader, Error};
+use std::io::{BufRead, BufReader, Error, ErrorKind::InvalidData};
 
 struct Policy {
     a: usize,
@@ -13,7 +13,7 @@ struct Password<'a> {
 }
 
 impl<'a> Password<'a> {
-    fn from_str(s: &'a str) -> Result<Self, std::num::ParseIntError> {
+    fn from_str(s: &'a str) -> Result<Self, Box<dyn std::error::Error>> {
         let v: Vec<&str> = s.split(|c| [' ', '-', ':'].contains(&c)).collect();
         match v.as_slice() {
             [a, b, letter, _, password] => Ok(Password {
@@ -24,7 +24,7 @@ impl<'a> Password<'a> {
                 },
                 password,
             }),
-            _ => panic!("Invalid data"),
+            _ => Err(Box::new(Error::from(InvalidData))),
         }
     }
     fn is_valid(&self) -> bool {
@@ -44,7 +44,7 @@ fn main() -> Result<(), Error> {
         .collect::<Result<Vec<String>, Error>>()?;
     let valid_passwords = entries
         .iter()
-        .map(|s| Password::from_str(s).unwrap())
+        .filter_map(|s| Password::from_str(s).ok())
         .filter(|p| p.is_valid())
         .count();
     println!("{}", valid_passwords);
