@@ -1,18 +1,11 @@
 use std::fs::File;
-use std::io::{BufRead, BufReader, Error, ErrorKind, Read};
+use std::io::{BufRead, BufReader, Error, ErrorKind::InvalidData};
 
-const FILE: &str = "./input/1.txt";
-const SUM: i32 = 2020;
-
-fn read_lines<R: Read>(io: R) -> Result<Vec<i32>, Error> {
-    BufReader::new(io)
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let expenses: Vec<i32> = BufReader::new(File::open("./input/1.txt")?)
         .lines()
-        .map(|l| l.and_then(|v| v.parse().map_err(|e| Error::new(ErrorKind::InvalidData, e))))
-        .collect()
-}
-
-fn main() -> Result<(), Error> {
-    let expenses = read_lines(File::open(FILE)?)?;
+        .map(|l| l.and_then(|v| v.parse().map_err(|e| Error::new(InvalidData, e))))
+        .collect::<Result<Vec<i32>, _>>()?;
     let result = expenses.iter().enumerate().find_map(|(i, &x)| {
         expenses
             .iter()
@@ -22,15 +15,13 @@ fn main() -> Result<(), Error> {
                 expenses
                     .iter()
                     .skip(ii + 1)
-                    .find(|&z| x + y + z == SUM)
+                    .find(|&z| x + y + z == 2020)
                     .map(|&z| x * y * z)
             })
     });
-
     match result {
-        Some(n) => println!("{:?}", n),
+        Some(n) => println!("{}", n),
         None => println!("No combination found!"),
     }
-
     Ok(())
 }
