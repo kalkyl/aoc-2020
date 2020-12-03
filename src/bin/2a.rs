@@ -36,7 +36,7 @@ impl<'a> Password<'a> {
 fn main() -> Result<(), Error> {
     let entries = BufReader::new(File::open("./input/2.txt")?)
         .lines()
-        .collect::<Result<Vec<String>, Error>>()?;
+        .collect::<Result<Vec<_>, _>>()?;
     let valid_passwords = entries
         .iter()
         .filter_map(|s| Password::from_str(s).ok())

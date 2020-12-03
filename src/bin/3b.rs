@@ -15,7 +15,7 @@ fn count_trees(rows: &Vec<String>, slope: &(usize, usize)) -> usize {
 fn main() -> Result<(), Error> {
     let rows = BufReader::new(File::open("./input/3.txt")?)
         .lines()
-        .collect::<Result<Vec<String>, Error>>()?;
+        .collect::<Result<Vec<_>, _>>()?;
     let slopes = [(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)];
     let result = slopes
         .iter()
