@@ -1,7 +1,7 @@
 use std::fs::File;
 use std::io::{BufRead, BufReader, Error};
 
-fn count_trees(rows: &Vec<String>, slope: &(usize, usize)) -> usize {
+fn count_trees(rows: &[String], slope: &(usize, usize)) -> usize {
     let (xs, ys) = slope;
     rows.iter()
         .enumerate()

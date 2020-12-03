@@ -20,7 +20,7 @@ impl<'a> Password<'a> {
                 policy: Policy {
                     min: min.parse()?,
                     max: max.parse()?,
-                    letter: letter.chars().nth(0).unwrap(),
+                    letter: letter.chars().next().unwrap(),
                 },
                 password,
             }),

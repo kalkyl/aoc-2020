@@ -20,7 +20,7 @@ impl<'a> Password<'a> {
                 policy: Policy {
                     a: a.parse()?,
                     b: b.parse()?,
-                    letter: letter.chars().nth(0).unwrap(),
+                    letter: letter.chars().next().unwrap(),
                 },
                 password,
             }),
