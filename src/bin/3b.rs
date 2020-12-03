@@ -6,7 +6,7 @@ fn count_trees(rows: &Vec<String>, slope: &(usize, usize)) -> usize {
     rows.iter()
         .enumerate()
         .filter(|(y, r)| {
-            let x = ((y / ys) * xs) % r.chars().count();
+            let x = (xs * (y / ys)) % r.chars().count();
             (y % ys == 0) && (r.chars().nth(x) == Some('#'))
         })
         .count()
@@ -17,9 +17,9 @@ fn main() -> Result<(), Error> {
         .lines()
         .collect::<Result<Vec<String>, Error>>()?;
     let slopes = [(1, 1), (3, 1), (5, 1), (7, 1), (1, 2)];
-    let trees = slopes
+    let result = slopes
         .iter()
         .fold(1, |acc, slope| acc * count_trees(&rows, slope));
-    println!("{:?}", trees);
+    println!("{}", result);
     Ok(())
 }
