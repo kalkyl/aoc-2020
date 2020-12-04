@@ -31,13 +31,11 @@ fn is_valid_field(key: &str, value: &str) -> bool {
             .unwrap()
             .captures(value)
             .map(|c| match (c.get(1), c.get(2)) {
-                (Some(height), Some(unit)) => {
-                    match (unit.as_str(), height.as_str().parse::<usize>()) {
-                        ("cm", Ok(h)) => h >= 150 && h <= 193,
-                        ("in", Ok(h)) => h >= 59 && h <= 76,
-                        _ => false,
-                    }
-                }
+                (Some(height), Some(unit)) => match unit.as_str() {
+                    "cm" => is_in_range(height.as_str(), 150, 193),
+                    "in" => is_in_range(height.as_str(), 59, 76),
+                    _ => false,
+                },
                 _ => false,
             })
             .unwrap_or(false),
