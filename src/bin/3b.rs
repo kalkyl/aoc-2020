@@ -2,12 +2,12 @@ use std::fs::File;
 use std::io::{BufRead, BufReader, Error};
 
 fn count_trees(rows: &[String], slope: &(usize, usize)) -> usize {
-    let (xs, ys) = slope;
+    let &(xs, ys) = slope;
     rows.iter()
+        .step_by(ys)
         .enumerate()
         .filter(|(y, r)| {
-            let x = (xs * (y / ys)) % r.chars().count();
-            (y % ys == 0) && (r.chars().nth(x) == Some('#'))
+            r.chars().nth(xs * y % r.chars().count()) == Some('#')
         })
         .count()
 }
