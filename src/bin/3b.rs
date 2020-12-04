@@ -6,9 +6,7 @@ fn count_trees(rows: &[String], slope: &(usize, usize)) -> usize {
     rows.iter()
         .step_by(ys)
         .enumerate()
-        .filter(|(y, r)| {
-            r.chars().nth(xs * y % r.chars().count()) == Some('#')
-        })
+        .filter(|(y, r)| r.chars().nth(xs * y % r.chars().count()) == Some('#'))
         .count()
 }
 
