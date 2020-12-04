@@ -12,20 +12,18 @@ fn passport_from_str(s: &str) -> HashMap<&str, &str> {
         .collect()
 }
 
+fn is_in_range(value: &str, min: usize, max: usize) -> bool {
+    value
+        .parse::<usize>()
+        .map(|n| n >= min && n <= max)
+        .unwrap_or(false)
+}
+
 fn is_valid_field(key: &str, value: &str) -> bool {
     match key {
-        "byr" => value
-            .parse::<usize>()
-            .map(|n| n >= 1920 && n <= 2002)
-            .unwrap_or(false),
-        "iyr" => value
-            .parse::<usize>()
-            .map(|n| n >= 2010 && n <= 2020)
-            .unwrap_or(false),
-        "eyr" => value
-            .parse::<usize>()
-            .map(|n| n >= 2020 && n <= 2030)
-            .unwrap_or(false),
+        "byr" => is_in_range(value, 1920, 2002),
+        "iyr" => is_in_range(value, 2010, 2020),
+        "eyr" => is_in_range(value, 2020, 2030),
         "ecl" => ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"].contains(&value),
         "hcl" => Regex::new(r#"#[0-9a-f]{6}"#).unwrap().is_match(value),
         "pid" => Regex::new(r#"^[0-9]{9}$"#).unwrap().is_match(value),
@@ -43,7 +41,7 @@ fn is_valid_field(key: &str, value: &str) -> bool {
                 _ => false,
             })
             .unwrap_or(false),
-        _ => true,
+        _ => false,
     }
 }
 
