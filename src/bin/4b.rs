@@ -23,21 +23,21 @@ fn is_valid_field(key: &str, value: &str) -> bool {
         "byr" => is_in_range(value, 1920, 2002),
         "iyr" => is_in_range(value, 2010, 2020),
         "eyr" => is_in_range(value, 2020, 2030),
-        "ecl" => ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"].contains(&value),
+        "hgt" => match value.trim_start_matches(|c: char| c.is_numeric()) {
+            "cm" => is_in_range(value.trim_end_matches(|c: char| !c.is_numeric()), 150, 193),
+            "in" => is_in_range(value.trim_end_matches(|c: char| !c.is_numeric()), 59, 76),
+            _ => false,
+        },
         "hcl" => {
-            value.len() == 7
+            value.chars().count() == 7
                 && value.starts_with('#')
                 && value
                     .chars()
                     .skip(1)
                     .all(|c| c.is_numeric() || ('a'..='f').contains(&c))
         }
-        "pid" => value.chars().all(char::is_numeric) && value.len() == 9,
-        "hgt" => match value.trim_start_matches(|c: char| c.is_numeric()) {
-            "cm" => is_in_range(value.trim_end_matches(|c: char| !c.is_numeric()), 150, 193),
-            "in" => is_in_range(value.trim_end_matches(|c: char| !c.is_numeric()), 59, 76),
-            _ => false,
-        },
+        "ecl" => ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"].contains(&value),
+        "pid" => value.chars().count() == 9 && value.chars().all(char::is_numeric),
         _ => false,
     }
 }
