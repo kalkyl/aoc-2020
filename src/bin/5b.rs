@@ -2,7 +2,7 @@ use std::fs::File;
 use std::io::{BufRead, BufReader, Error};
 
 fn mid(a: usize, b: usize) -> usize {
-    (b - a) / 2 + 1
+    (b - a + 1) / 2
 }
 
 fn seat_id_from_str(s: &str) -> usize {
