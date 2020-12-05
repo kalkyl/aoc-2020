@@ -1,4 +1,3 @@
-use regex::Regex;
 use std::{collections::HashMap, fs::read_to_string, io::Error};
 
 fn passport_from_str(s: &str) -> HashMap<&str, &str> {
@@ -25,20 +24,20 @@ fn is_valid_field(key: &str, value: &str) -> bool {
         "iyr" => is_in_range(value, 2010, 2020),
         "eyr" => is_in_range(value, 2020, 2030),
         "ecl" => ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"].contains(&value),
-        "hcl" => Regex::new(r#"#[0-9a-f]{6}"#).unwrap().is_match(value),
-        "pid" => Regex::new(r#"^[0-9]{9}$"#).unwrap().is_match(value),
-        "hgt" => Regex::new(r#"(\d+)(cm|in)"#)
-            .unwrap()
-            .captures(value)
-            .map(|c| match (c.get(1), c.get(2)) {
-                (Some(height), Some(unit)) => match unit.as_str() {
-                    "cm" => is_in_range(height.as_str(), 150, 193),
-                    "in" => is_in_range(height.as_str(), 59, 76),
-                    _ => false,
-                },
-                _ => false,
-            })
-            .unwrap_or(false),
+        "hcl" => {
+            value.len() == 7
+                && value.starts_with('#')
+                && value
+                    .chars()
+                    .skip(1)
+                    .all(|c| c.is_numeric() || ('a'..='f').contains(&c))
+        }
+        "pid" => value.chars().all(char::is_numeric) && value.len() == 9,
+        "hgt" => match value.trim_start_matches(|c: char| c.is_numeric()) {
+            "cm" => is_in_range(value.trim_end_matches(|c: char| !c.is_numeric()), 150, 193),
+            "in" => is_in_range(value.trim_end_matches(|c: char| !c.is_numeric()), 59, 76),
+            _ => false,
+        },
         _ => false,
     }
 }
