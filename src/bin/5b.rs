@@ -1,8 +1,8 @@
 use std::fs::File;
 use std::io::{BufRead, BufReader, Error};
 
-fn mid(x: &(usize, usize)) -> usize {
-    (x.1 - x.0) / 2 + 1
+fn mid((a, b): &(usize, usize)) -> usize {
+    (b - a) / 2 + 1
 }
 
 fn seat_id_from_str(s: &str) -> usize {
