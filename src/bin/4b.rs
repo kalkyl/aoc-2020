@@ -11,14 +11,11 @@ fn passport_from_str(s: &str) -> HashMap<&str, &str> {
         .collect()
 }
 
-fn is_in_range(value: &str, min: usize, max: usize) -> bool {
-    value
-        .parse::<usize>()
-        .map(|n| n >= min && n <= max)
-        .unwrap_or(false)
-}
-
 fn is_valid_field(key: &str, value: &str) -> bool {
+    let is_in_range = |s: &str, min, max| match s.parse::<usize>() {
+        Ok(n) => n >= min && n <= max,
+        _ => false,
+    };
     match key {
         "byr" => is_in_range(value, 1920, 2002),
         "iyr" => is_in_range(value, 2010, 2020),
