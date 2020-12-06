@@ -20,7 +20,7 @@ fn is_valid_field(key: &str, value: &str) -> bool {
         "byr" => is_in_range(value, 1920, 2002),
         "iyr" => is_in_range(value, 2010, 2020),
         "eyr" => is_in_range(value, 2020, 2030),
-        "hgt" => match value.trim_start_matches(|c: char| c.is_numeric()) {
+        "hgt" => match value.trim_start_matches(char::is_numeric) {
             "cm" => is_in_range(value.trim_end_matches(|c: char| !c.is_numeric()), 150, 193),
             "in" => is_in_range(value.trim_end_matches(|c: char| !c.is_numeric()), 59, 76),
             _ => false,
@@ -47,8 +47,8 @@ fn main() -> Result<(), Error> {
         .iter()
         .filter(|&passport| {
             required_fields.iter().all(|&key| match passport.get(key) {
-                Some(&value) => is_valid_field(key, value),
-                None => false,
+                Some(value) => is_valid_field(key, value),
+                _ => false,
             })
         })
         .count();
