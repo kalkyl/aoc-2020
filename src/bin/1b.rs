@@ -19,9 +19,6 @@ fn main() -> Result<(), Error> {
                     .map(|&z| x * y * z)
             })
     });
-    match result {
-        Some(n) => println!("{}", n),
-        None => println!("No combination found!"),
-    }
+    println!("{}", result.unwrap());
     Ok(())
 }

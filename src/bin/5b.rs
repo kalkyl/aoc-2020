@@ -18,7 +18,7 @@ fn main() -> Result<(), Error> {
     let seats: Vec<_> = input.iter().map(|s| seat_id_from_str(s)).collect();
     let min_id = *seats.iter().min().unwrap();
     let max_id = *seats.iter().max().unwrap();
-    let missing_id = (min_id..=max_id).find(|id| !seats.contains(id)).unwrap();
-    println!("{}", missing_id);
+    let missing_id = (min_id..=max_id).find(|id| !seats.contains(id));
+    println!("{}", missing_id.unwrap());
     Ok(())
 }

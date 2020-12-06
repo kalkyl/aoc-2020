@@ -13,9 +13,6 @@ fn main() -> Result<(), Error> {
             .find(|&y| x + y == 2020)
             .map(|&y| x * y)
     });
-    match result {
-        Some(n) => println!("{}", n),
-        None => println!("No combination found!"),
-    }
+    println!("{}", result.unwrap());
     Ok(())
 }
