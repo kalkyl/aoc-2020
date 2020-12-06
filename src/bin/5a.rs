@@ -1,14 +1,10 @@
 use std::fs::File;
 use std::io::{BufRead, BufReader, Error};
 
-fn mid(a: usize, b: usize) -> usize {
-    (b - a + 1) / 2
-}
-
 fn step((a, b): (usize, usize), c: char) -> (usize, usize) {
     match c {
-        'F' | 'L' => (a, b - mid(a, b)),
-        _ => (a + mid(a, b), b),
+        'F' | 'L' => (a, b - (b - a + 1) / 2),
+        _ => (a + (b - a + 1) / 2, b),
     }
 }
 
