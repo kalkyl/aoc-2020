@@ -7,7 +7,7 @@ fn unique(s: &str) -> HashSet<char> {
 fn common(s: &str) -> HashSet<char> {
     unique(s)
         .iter()
-        .filter(|&&a| s.lines().all(|m| m.contains(a)))
+        .filter(|&&c| s.lines().all(|l| l.contains(c)))
         .cloned()
         .collect()
 }
