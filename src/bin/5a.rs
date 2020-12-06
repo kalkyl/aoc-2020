@@ -8,13 +8,11 @@ fn mid(a: usize, b: usize) -> usize {
 fn seat_id_from_str(s: &str) -> usize {
     let row = s.chars().take(7).fold((0, 127), |(a, b), c| match c {
         'F' => (a, b - mid(a, b)),
-        'B' => (a + mid(a, b), b),
-        _ => panic!("Invalid input"),
+        _ => (a + mid(a, b), b),
     });
     let col = s.chars().skip(7).fold((0, 7), |(a, b), c| match c {
         'L' => (a, b - mid(a, b)),
-        'R' => (a + mid(a, b), b),
-        _ => panic!("Invalid input"),
+        _ => (a + mid(a, b), b),
     });
     row.0 * 8 + col.0
 }
