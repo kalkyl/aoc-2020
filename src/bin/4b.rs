@@ -26,8 +26,8 @@ fn is_valid_field(key: &str, value: &str) -> bool {
             _ => false,
         },
         "hcl" => {
-            value.chars().count() == 7
-                && value.starts_with('#')
+            value.starts_with('#')
+                && value.chars().count() == 7
                 && value
                     .chars()
                     .skip(1)
