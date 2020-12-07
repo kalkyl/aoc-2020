@@ -26,7 +26,7 @@ fn rule_from_str(s: &str) -> Result<(&str, Rule), ()> {
 
 fn count_recursive(rules: &HashMap<&str, Rule>, key: &str) -> usize {
     rules.get(key).unwrap().iter().fold(0, |acc, (qty, name)| {
-        acc + *qty + *qty * count_recursive(&rules, name)
+        acc + *qty + *qty * count_recursive(rules, name)
     })
 }
 
