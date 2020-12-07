@@ -2,9 +2,9 @@ use std::io::{BufRead, BufReader, Error};
 use std::{collections::HashMap, fs::File};
 type Rule<'a> = Vec<(usize, &'a str)>;
 
-fn rule_from_str(s: &str) -> Option<(&str, Rule)> {
+fn rule_from_str(s: &str) -> Result<(&str, Rule), ()> {
     match s.split(" contain ").collect::<Vec<_>>().as_slice() {
-        [key, contents] => Some((
+        [key, contents] => Ok((
             key.trim_end_matches('s'),
             contents
                 .split(", ")
@@ -20,7 +20,7 @@ fn rule_from_str(s: &str) -> Option<(&str, Rule)> {
                 )
                 .collect::<Vec<_>>(),
         )),
-        _ => None,
+        _ => Err(()),
     }
 }
 
@@ -34,7 +34,7 @@ fn main() -> Result<(), Error> {
     let input = BufReader::new(File::open("./input/7.txt")?)
         .lines()
         .collect::<Result<Vec<_>, _>>()?;
-    let rules: HashMap<_, _> = input.iter().filter_map(|s| rule_from_str(s)).collect();
+    let rules: HashMap<_, _> = input.iter().filter_map(|s| rule_from_str(s).ok()).collect();
     let result = count_recursive(&rules, "shiny gold bag");
     println!("{}", result);
     Ok(())
