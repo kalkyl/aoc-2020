@@ -29,7 +29,7 @@ fn contains_recursive(rules: &HashMap<&str, Rule>, search: &str, key: &str) -> b
         .get(key)
         .unwrap()
         .iter()
-        .any(|(_, name)| *name == search || contains_recursive(&rules, search, name))
+        .any(|(_, name)| *name == search || contains_recursive(rules, search, name))
 }
 
 fn main() -> Result<(), Error> {
