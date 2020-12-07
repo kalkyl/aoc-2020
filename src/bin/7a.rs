@@ -39,7 +39,7 @@ fn main() -> Result<(), Error> {
     let rules: HashMap<_, _> = input.iter().filter_map(|s| rule_from_str(s).ok()).collect();
     let result = rules
         .keys()
-        .filter(|&key| contains_recursive(&rules, "shiny gold bag", key))
+        .filter(|&&key| contains_recursive(&rules, "shiny gold bag", key))
         .count();
     println!("{}", result);
     Ok(())
