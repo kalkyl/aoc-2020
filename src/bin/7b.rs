@@ -18,7 +18,7 @@ fn rule_from_str(s: &str) -> Result<(&str, Rule), ()> {
                         _ => None,
                     },
                 )
-                .collect::<Vec<_>>(),
+                .collect(),
         )),
         _ => Err(()),
     }
