@@ -3,9 +3,9 @@ use std::{collections::HashMap, fs::File};
 type Rule<'a> = Vec<(usize, &'a str)>;
 
 fn rule_from_str(s: &str) -> Result<(&str, Rule), ()> {
-    match s.split(" contain ").collect::<Vec<_>>().as_slice() {
+    match s.split("s contain ").collect::<Vec<_>>().as_slice() {
         [key, contents] => Ok((
-            key.trim_end_matches('s'),
+            key,
             contents
                 .split(", ")
                 .filter_map(
