@@ -14,23 +14,23 @@ fn run_flipped(instructions: &Vec<(&str, i32)>, flip_line: usize) -> Result<i32,
             (HashSet::new(), 0, 0),
             |(executed, line, acc), _| match executed.insert(*line) {
                 true => {
-                    match instructions.iter().nth(*line as usize) {
-                        Some((cmd, arg)) => match *cmd {
+                    match instructions.iter().nth(*line as usize).map(|(cmd, arg)| {
+                        match (*line == flip_line as i32, *cmd) {
+                            (true, "jmp") => ("nop", arg),
+                            (true, "nop") => ("jmp", arg),
+                            _ => (*cmd, arg),
+                        }
+                    }) {
+                        Some((cmd, arg)) => match cmd {
                             "acc" => {
                                 *acc += arg;
                                 *line += 1;
                             }
                             "jmp" => {
-                                *line += match *line == flip_line as i32 {
-                                    true => 1,
-                                    _ => *arg as i32,
-                                };
+                                *line += *arg as i32;
                             }
                             _ => {
-                                *line += match *line == flip_line as i32 {
-                                    true => *arg as i32,
-                                    _ => 1,
-                                };
+                                *line += 1;
                             }
                         },
                         _ => {
