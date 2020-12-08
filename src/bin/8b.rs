@@ -33,7 +33,9 @@ fn run_flipped(instructions: &Vec<(&str, i32)>, flip_line: usize) -> Result<i32,
                                 };
                             }
                         },
-                        _ => {}
+                        _ => {
+                            return None;
+                        }
                     }
                     Some((*line, *acc))
                 }
