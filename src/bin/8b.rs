@@ -9,7 +9,7 @@ fn instruction_from_str(s: &str) -> Result<(&str, i32), ()> {
 }
 
 fn run_flipped(instructions: &Vec<(&str, i32)>, flip_line: usize) -> Result<i32, ()> {
-    let (line, acc) = (0..)
+    let last = (0..)
         .scan(
             (HashSet::new(), 0, 0),
             |(executed, line, acc), _| match executed.insert(*line) {
@@ -42,10 +42,9 @@ fn run_flipped(instructions: &Vec<(&str, i32)>, flip_line: usize) -> Result<i32,
                 _ => None,
             },
         )
-        .last()
-        .unwrap();
-    match line as usize == instructions.len() {
-        true => Ok(acc),
+        .last();
+    match last {
+        Some((line, acc)) if line as usize == instructions.len() => Ok(acc),
         _ => Err(()),
     }
 }
