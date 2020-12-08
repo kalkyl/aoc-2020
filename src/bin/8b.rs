@@ -26,16 +26,10 @@ fn run_flipped(instructions: &Vec<(&str, i32)>, flip_line: usize) -> Result<i32,
                                 *acc += arg;
                                 *line += 1;
                             }
-                            "jmp" => {
-                                *line += arg;
-                            }
-                            _ => {
-                                *line += 1;
-                            }
+                            "jmp" => *line += arg,
+                            _ => *line += 1,
                         },
-                        _ => {
-                            return None;
-                        }
+                        _ => return None,
                     }
                     Some((*line, *acc))
                 }
@@ -62,6 +56,6 @@ fn main() -> Result<(), Error> {
         .enumerate()
         .filter(|(_, (cmd, _))| *cmd == "nop" || *cmd == "jmp")
         .find_map(|(i, _)| run_flipped(&instructions, i).ok());
-    println!("{:?}", acc.unwrap());
+    println!("{}", acc.unwrap());
     Ok(())
 }

@@ -30,7 +30,7 @@ fn main() -> Result<(), Error> {
                             "jmp" => *line += arg,
                             _ => *line += 1,
                         },
-                        _ => panic!("Missing instruction!"),
+                        _ => return None,
                     }
                     Some(*acc)
                 }
