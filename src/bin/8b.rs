@@ -2,14 +2,14 @@ use std::io::{BufRead, BufReader, Error};
 use std::{collections::HashSet, fs::File};
 
 fn instruction_from_str(s: &str) -> Result<(&str, i32), ()> {
-    match s.split(' ').collect::<Vec<_>>().as_slice() {
+    match s.split(' ').collect::<Vec<_>>()[..] {
         [cmd, arg] => Ok((cmd, arg.parse().map_err(|_| ())?)),
         _ => Err(()),
     }
 }
 
-fn run_flipped(instructions: &Vec<(&str, i32)>, flip_line: usize) -> Result<i32, ()> {
-    let last = (0..)
+fn run_flipped(instructions: &[(&str, i32)], flip_line: usize) -> Result<i32, ()> {
+    let last_state = (0..)
         .scan(
             (HashSet::new(), 0, 0),
             |(executed, line, acc), _| match executed.insert(*line) {
@@ -37,7 +37,7 @@ fn run_flipped(instructions: &Vec<(&str, i32)>, flip_line: usize) -> Result<i32,
             },
         )
         .last();
-    match last {
+    match last_state {
         Some((line, acc)) if line as usize == instructions.len() => Ok(acc),
         _ => Err(()),
     }
