@@ -14,7 +14,7 @@ struct Password<'a> {
 
 impl<'a> Password<'a> {
     fn from_str(s: &'a str) -> Result<Self, Box<dyn std::error::Error>> {
-        let v: Vec<&str> = s.split(|c| [' ', '-', ':'].contains(&c)).collect();
+        let v: Vec<_> = s.split(|c| [' ', '-', ':'].contains(&c)).collect();
         match v.as_slice() {
             [min, max, letter, _, password] => Ok(Password {
                 policy: Policy {

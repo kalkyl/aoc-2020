@@ -2,12 +2,10 @@ use std::{collections::HashMap, fs::read_to_string, io::Error};
 
 fn passport_from_str(s: &str) -> HashMap<&str, &str> {
     s.split_whitespace()
-        .filter_map(
-            |field| match *field.split(':').collect::<Vec<_>>().as_slice() {
-                [key, value] => Some((key, value)),
-                _ => None,
-            },
-        )
+        .filter_map(|field| match (*field).split(':').collect::<Vec<_>>()[..] {
+            [key, value] => Some((key, value)),
+            _ => None,
+        })
         .collect()
 }
 
