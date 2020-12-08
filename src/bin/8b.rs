@@ -15,7 +15,7 @@ fn run_flipped(instructions: &Vec<(&str, i32)>, flip_line: usize) -> Result<i32,
             |(executed, line, acc), _| match executed.insert(*line) {
                 true => {
                     match instructions.iter().nth(*line as usize).map(|(cmd, arg)| {
-                        match (*line == flip_line as i32, *cmd) {
+                        match (*line as usize == flip_line, *cmd) {
                             (true, "jmp") => ("nop", arg),
                             (true, "nop") => ("jmp", arg),
                             _ => (*cmd, arg),
