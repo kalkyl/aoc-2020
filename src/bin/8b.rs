@@ -27,7 +27,7 @@ fn run_flipped(instructions: &Vec<(&str, i32)>, flip_line: usize) -> Result<i32,
                                 *line += 1;
                             }
                             "jmp" => {
-                                *line += *arg;
+                                *line += arg;
                             }
                             _ => {
                                 *line += 1;
