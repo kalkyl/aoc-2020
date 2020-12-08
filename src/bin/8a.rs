@@ -8,18 +8,14 @@ fn instruction_from_str(s: &str) -> Result<(&str, i32), ()> {
     }
 }
 
-fn main() -> Result<(), Error> {
-    let instructions = BufReader::new(File::open("./input/8.txt")?)
-        .lines()
-        .collect::<Result<Vec<_>, _>>()?;
-    let acc = (0..)
+fn run(instructions: &[String]) -> Option<i32> {
+    (0..)
         .scan(
             (HashSet::new(), 0, 0),
             |(executed, line, acc), _| match executed.insert(*line) {
                 true => {
                     match instructions
-                        .iter()
-                        .nth(*line as usize)
+                        .get(*line as usize)
                         .and_then(|s| instruction_from_str(s).ok())
                     {
                         Some((cmd, arg)) => match cmd {
@@ -37,7 +33,14 @@ fn main() -> Result<(), Error> {
                 _ => None,
             },
         )
-        .last();
+        .last()
+}
+
+fn main() -> Result<(), Error> {
+    let instructions = BufReader::new(File::open("./input/8.txt")?)
+        .lines()
+        .collect::<Result<Vec<_>, _>>()?;
+    let acc = run(&instructions);
     println!("{}", acc.unwrap());
     Ok(())
 }

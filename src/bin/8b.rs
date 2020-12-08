@@ -14,7 +14,7 @@ fn run_flipped(instructions: &[(&str, i32)], flip_line: usize) -> Result<i32, ()
             (HashSet::new(), 0, 0),
             |(executed, line, acc), _| match executed.insert(*line) {
                 true => {
-                    match instructions.iter().nth(*line as usize).map(|(cmd, arg)| {
+                    match instructions.get(*line as usize).map(|(cmd, arg)| {
                         match (*line as usize == flip_line, *cmd) {
                             (true, "jmp") => ("nop", arg),
                             (true, "nop") => ("jmp", arg),
