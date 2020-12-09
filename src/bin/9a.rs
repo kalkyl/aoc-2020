@@ -1,10 +1,11 @@
 use std::fs::File;
 use std::io::{BufRead, BufReader, Error, ErrorKind::InvalidData};
+const BUFFERSIZE: usize = 25;
 
-fn is_valid(list: &[i64], i: usize) -> bool {
+fn is_valid(list: &[i64], len: usize, i: usize) -> bool {
     match list.get(i) {
         Some(sum) => {
-            let fifo: Vec<_> = list.iter().skip(i - 25).take(25).collect();
+            let fifo: Vec<_> = list.iter().skip(i - len).take(len).collect();
             fifo.iter()
                 .any(|x| fifo.iter().filter(|&y| y != x).any(|&y| sum - *x == *y))
         }
@@ -20,8 +21,8 @@ fn main() -> Result<(), Error> {
     let (_, result) = list
         .iter()
         .enumerate()
-        .skip(25)
-        .find(|(i, _)| !is_valid(&list, *i))
+        .skip(BUFFERSIZE)
+        .find(|(i, _)| !is_valid(&list, BUFFERSIZE, *i))
         .unwrap();
     println!("{}", result);
     Ok(())
