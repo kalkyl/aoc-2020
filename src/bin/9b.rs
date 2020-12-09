@@ -15,15 +15,17 @@ fn is_valid(list: &[i64], len: usize, i: usize) -> bool {
 
 fn find_contiguous_sum(list: &[i64], target: i64) -> Option<(usize, usize)> {
     let sum_range = |start, end| list.iter().skip(start).take(1 + end - start).sum::<i64>();
-    let (mut start, mut end) = (0, 0);
-    while !(sum_range(start, end) == target && end - start > 1) && end < list.len() {
+    let (mut start, mut end) = (0, 2);
+    let mut sum = sum_range(start, end);
+    while !(sum == target && end - start > 1) && end < list.len() {
         match sum_range(start, end) {
-            sum if sum <= target => end += 1,
-            sum if sum > target => start += 1,
+            x if x <= target => end += 1,
+            x if x > target => start += 1,
             _ => unreachable!(),
         }
+        sum = sum_range(start, end);
     }
-    match sum_range(start, end) == target && end - start > 1 {
+    match sum == target && end - start > 1 {
         true => Some((start, end)),
         _ => None,
     }
