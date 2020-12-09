@@ -1,6 +1,6 @@
 use std::fs::File;
 use std::io::{BufRead, BufReader, Error, ErrorKind::InvalidData};
-const BUFFERSIZE: usize = 25;
+const BUFFER_SIZE: usize = 25;
 
 fn is_valid(list: &[i64], len: usize, i: usize) -> bool {
     match list.get(i) {
@@ -38,8 +38,8 @@ fn main() -> Result<(), Error> {
     let result = list
         .iter()
         .enumerate()
-        .skip(BUFFERSIZE)
-        .find(|(i, _)| !is_valid(&list, BUFFERSIZE, *i))
+        .skip(BUFFER_SIZE)
+        .find(|(i, _)| !is_valid(&list, BUFFER_SIZE, *i))
         .and_then(|(_, target)| {
             find_contiguous_sum(&list, *target).and_then(|(start, end)| {
                 let range: Vec<_> = list.iter().skip(start).take(1 + end - start).collect();
