@@ -17,14 +17,14 @@ fn find_contiguous_sum(list: &[i64], target: i64) -> Option<(usize, usize)> {
     let sum_range = |start, end| list.iter().skip(start).take(1 + end - start).sum::<i64>();
     let (mut start, mut end) = (0, 1);
     let mut sum = sum_range(start, end);
-    while !(sum == target && end - start > 1) && end < list.len() {
+    while !(sum == target && end > start) && end < list.len() {
         match sum <= target {
             true => end += 1,
             _ => start += 1,
         }
         sum = sum_range(start, end);
     }
-    match sum == target && end - start > 1 {
+    match sum == target && end > start {
         true => Some((start, end)),
         _ => None,
     }
