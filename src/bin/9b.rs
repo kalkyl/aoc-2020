@@ -31,7 +31,8 @@ fn find_contiguous_sum(list: &[i64], target: i64) -> Option<(usize, usize)> {
 
     match end_state {
         Some((start, end))
-            if list.iter().skip(start).take(1 + end - start).sum::<i64>() == target =>
+            if end - start > 1
+                && list.iter().skip(start).take(1 + end - start).sum::<i64>() == target =>
         {
             Some((start, end))
         }
