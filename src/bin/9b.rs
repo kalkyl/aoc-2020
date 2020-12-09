@@ -21,7 +21,7 @@ fn find_contiguous_sum(list: &[i64], target: i64) -> Option<(usize, usize)> {
             (sum, false) if sum == target => end += 1,
             (sum, _) if sum < target => end += 1,
             (sum, _) if sum > target => start += 1,
-            _ => {}
+            _ => unreachable!()
         }
     }
     match sum_range(start, end) == target && end - start > 1 {
