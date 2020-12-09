@@ -1,6 +1,6 @@
 use std::fs::File;
 use std::io::{BufRead, BufReader, Error, ErrorKind::InvalidData};
-const BUFFER_SIZE: usize = 25;
+const FIFO_SIZE: usize = 25;
 
 fn is_valid(list: &[i64], len: usize, i: usize) -> bool {
     match list.get(i) {
@@ -21,8 +21,8 @@ fn main() -> Result<(), Error> {
     let (_, result) = list
         .iter()
         .enumerate()
-        .skip(BUFFER_SIZE)
-        .find(|(i, _)| !is_valid(&list, BUFFER_SIZE, *i))
+        .skip(FIFO_SIZE)
+        .find(|(i, _)| !is_valid(&list, FIFO_SIZE, *i))
         .unwrap();
     println!("{}", result);
     Ok(())
