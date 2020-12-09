@@ -18,10 +18,9 @@ fn find_contiguous_sum(list: &[i64], target: i64) -> Option<(usize, usize)> {
     let (mut start, mut end) = (0, 2);
     let mut sum = sum_range(start, end);
     while !(sum == target && end - start > 1) && end < list.len() {
-        match sum_range(start, end) {
-            x if x <= target => end += 1,
-            x if x > target => start += 1,
-            _ => unreachable!(),
+        match sum > target {
+            true => start += 1,
+            _ => end += 1,
         }
         sum = sum_range(start, end);
     }
