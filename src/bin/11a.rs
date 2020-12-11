@@ -2,15 +2,15 @@ use std::{fs::read_to_string, io::Error};
 
 fn count_adjacent(map: &Vec<Vec<char>>, row: usize, col: usize) -> usize {
     ((row as i32 - 1).max(0) as usize..=(row + 1).min(map.len() - 1))
-        .map(|y| {
-            ((col as i32 - 1).max(0) as usize..=(col + 1).min(map[0].len() - 1))
-                .filter(|x| match (map[y][*x], (y, *x) == (row, col)) {
+        .flat_map(|y| {
+            ((col as i32 - 1).max(0) as usize..=(col + 1).min(map[0].len() - 1)).filter(move |x| {
+                match (map[y][*x], (y, *x) == (row, col)) {
                     ('#', false) => true,
                     _ => false,
-                })
-                .count()
+                }
+            })
         })
-        .sum()
+        .count()
 }
 
 fn main() -> Result<(), Error> {
