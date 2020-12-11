@@ -1,13 +1,12 @@
 use std::fs::File;
-use std::io::{BufRead, BufReader, Error, ErrorKind::InvalidData};
+use std::io::{BufRead, BufReader, Error};
 
 fn main() -> Result<(), Error> {
     let mut list = BufReader::new(File::open("./input/10.txt")?)
         .lines()
-        .map(|l| l.and_then(|v| v.parse().map_err(|e| Error::new(InvalidData, e))))
-        .collect::<Result<Vec<i32>, _>>()?;
+        .map(|l| l.map(|v| v.parse().unwrap()))
+        .collect::<Result<Vec<usize>, _>>()?;
     list.sort_unstable();
-    list.dedup();
     let (diff1, diff3): (Vec<_>, Vec<_>) = list
         .iter()
         .scan(0, |prev_rating, rating| {
