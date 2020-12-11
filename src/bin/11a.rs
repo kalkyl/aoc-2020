@@ -23,7 +23,7 @@ fn main() -> Result<(), Error> {
             for x in 0..map[0].len() {
                 match (map[y][x], count_adjacent(&prev_map, y, x)) {
                     ('L', 0) => map[y][x] = '#',
-                    ('#', n) if n > 3 => map[y][x] = 'L',
+                    ('#', n) if n >= 4 => map[y][x] = 'L',
                     _ => (),
                 }
             }
