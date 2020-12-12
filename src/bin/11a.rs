@@ -1,6 +1,6 @@
 use std::{fs::read_to_string, io::Error};
 
-fn count_adjacent(map: &Vec<Vec<char>>, row: usize, col: usize) -> usize {
+fn count_adjacent(map: &[Vec<char>], row: usize, col: usize) -> usize {
     ((row as i32 - 1).max(0) as usize..=(row + 1).min(map.len() - 1))
         .flat_map(|y| {
             ((col as i32 - 1).max(0) as usize..=(col + 1).min(map[0].len() - 1)).filter(move |x| {

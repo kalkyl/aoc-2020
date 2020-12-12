@@ -1,6 +1,6 @@
 use std::{fs::read_to_string, io::Error};
 
-fn count_visible(map: &Vec<Vec<char>>, row: usize, col: usize) -> usize {
+fn count_visible(map: &[Vec<char>], row: usize, col: usize) -> usize {
     let mut sum = 0;
     for dy in -1..=1 {
         'dx: for dx in -1..=1 {
@@ -15,10 +15,11 @@ fn count_visible(map: &Vec<Vec<char>>, row: usize, col: usize) -> usize {
                         continue 'dx;
                     }
                     'L' => continue 'dx,
-                    _ => (),
+                    _ => {
+                        y += dy;
+                        x += dx;
+                    }
                 }
-                y += dy;
-                x += dx;
             }
         }
     }
