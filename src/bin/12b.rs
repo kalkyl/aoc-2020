@@ -10,24 +10,24 @@ fn direction_from_string(s: String) -> (char, i32) {
     )
 }
 
-fn rotate((y, x): (i32, i32), angle: i32) -> (i32, i32) {
+fn rotate((x, y): (i32, i32), angle: i32) -> (i32, i32) {
     let sin = (angle as f32).to_radians().sin();
     let cos = (angle as f32).to_radians().cos();
     (
-        ((x as f32) * sin + (y as f32) * cos).round() as i32,
         ((x as f32) * cos - (y as f32) * sin).round() as i32,
+        ((x as f32) * sin + (y as f32) * cos).round() as i32,
     )
 }
 
 fn run(directions: &[(char, i32)]) -> ((i32, i32), (i32, i32)) {
     directions.iter().fold(
-        ((0, 0), (1, 10)),
+        ((0, 0), (10, 1)),
         |(mut ship, mut waypoint), (action, arg)| {
             match action {
-                'N' => waypoint.0 += arg,
-                'S' => waypoint.0 -= arg,
-                'W' => waypoint.1 -= arg,
-                'E' => waypoint.1 += arg,
+                'W' => waypoint.0 -= arg,
+                'E' => waypoint.0 += arg,
+                'N' => waypoint.1 += arg,
+                'S' => waypoint.1 -= arg,
                 'R' => waypoint = rotate(waypoint, 360 - *arg),
                 'L' => waypoint = rotate(waypoint, *arg),
                 _ => {
@@ -45,8 +45,8 @@ fn main() -> Result<(), Error> {
         .lines()
         .map(|l| l.map(direction_from_string))
         .collect::<Result<Vec<_>, _>>()?;
-    let ((north, east), _) = run(&directions);
-    let distance = north.abs() + east.abs();
+    let ((east, north), _) = run(&directions);
+    let distance = east.abs() + north.abs();
     println!("{:?}", distance);
     Ok(())
 }
