@@ -21,8 +21,8 @@ fn run(directions: &[(char, i32)]) -> (i32, i32, i32) {
             'R' => (e, n, course + arg),
             'L' => (e, n, course - arg),
             _ => (
-                e + (*arg as f32 * (course as f32).to_radians().sin()) as i32,
-                n - (*arg as f32 * (course as f32).to_radians().cos()) as i32,
+                e + (*arg as f32 * (course as f32).to_radians().sin()).round() as i32,
+                n - (*arg as f32 * (course as f32).to_radians().cos()).round() as i32,
                 course,
             ),
         })
