@@ -1,10 +1,10 @@
 use std::io::{BufRead, BufReader, Error};
 use std::{collections::HashSet, fs::File};
 
-fn instruction_from_string(s: String) -> Result<(String, i32), ()> {
+fn instruction_from_string(s: String) -> (String, i32) {
     match s.split(' ').collect::<Vec<_>>()[..] {
-        [cmd, arg] => Ok((cmd.to_owned(), arg.parse::<i32>().unwrap())),
-        _ => Err(()),
+        [cmd, arg] => (cmd.to_owned(), arg.parse().unwrap()),
+        _ => panic!("Invalid data"),
     }
 }
 
@@ -32,7 +32,7 @@ fn run_flipped(instructions: &[(String, i32)], flip_line: usize) -> Result<i32, 
 fn main() -> Result<(), Error> {
     let instructions = BufReader::new(File::open("./input/8.txt")?)
         .lines()
-        .map(|l| l.map(|s| instruction_from_string(s).unwrap()))
+        .map(|l| l.map(instruction_from_string))
         .collect::<Result<Vec<_>, _>>()?;
     let acc = instructions
         .iter()
