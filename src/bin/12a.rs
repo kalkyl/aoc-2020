@@ -1,5 +1,5 @@
+use std::fs::File;
 use std::io::{BufRead, BufReader, Error};
-use std::{f32::consts::PI, fs::File};
 
 fn direction_from_string(s: String) -> (char, i32) {
     (
@@ -21,8 +21,8 @@ fn run(directions: &[(char, i32)]) -> (i32, i32, i32) {
             'L' => (n, e, c - arg),
             'R' => (n, e, c + arg),
             _ => (
-                n + (*arg as f32 * (c as f32 * (PI / 180.)).cos()) as i32,
-                e + (*arg as f32 * (c as f32 * (PI / 180.)).sin()) as i32,
+                n + (*arg as f32 * (c as f32).to_radians().cos()) as i32,
+                e + (*arg as f32 * (c as f32).to_radians().sin()) as i32,
                 c,
             ),
         })
