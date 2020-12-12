@@ -2,13 +2,13 @@ use std::{fs::read_to_string, io::Error};
 
 fn count_visible(map: &Vec<Vec<char>>, row: usize, col: usize) -> usize {
     let mut sum = 0;
-    for dy in -1i32..=1 {
-        'dx: for dx in -1i32..=1 {
+    for dy in -1..=1 {
+        'dx: for dx in -1..=1 {
             if dx == 0 && dy == 0 {
                 continue;
             }
             let (mut y, mut x) = (row as i32 + dy, col as i32 + dx);
-            while y >= 0 && (y as usize) < map.len() && x >= 0 && (x as usize) < map[0].len() {
+            while y >= 0 && (y < map.len() as i32) && x >= 0 && (x < map[0].len() as i32) {
                 match map[y as usize][x as usize] {
                     '#' => {
                         sum += 1;
