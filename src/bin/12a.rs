@@ -14,15 +14,15 @@ fn run(directions: &[(char, i32)]) -> (i32, i32, i32) {
     directions
         .iter()
         .fold((0, 0, 0), |(e, n, course), (action, arg)| match action {
-            'N' => (e, n - arg, course),
-            'S' => (e, n + arg, course),
-            'W' => (e - arg, n, course),
             'E' => (e + arg, n, course),
-            'L' => (e, n, course - arg),
+            'W' => (e - arg, n, course),
+            'N' => (e, n + arg, course),
+            'S' => (e, n - arg, course),
             'R' => (e, n, course + arg),
+            'L' => (e, n, course - arg),
             _ => (
                 e + (*arg as f32 * (course as f32).to_radians().sin()) as i32,
-                n + (*arg as f32 * (course as f32).to_radians().cos()) as i32,
+                n - (*arg as f32 * (course as f32).to_radians().cos()) as i32,
                 course,
             ),
         })

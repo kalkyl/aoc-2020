@@ -24,8 +24,8 @@ fn run(directions: &[(char, i32)]) -> ((i32, i32), (i32, i32)) {
         ((0, 0), (10, 1)),
         |(mut ship, mut waypoint), (action, arg)| {
             match action {
-                'W' => waypoint.0 -= arg,
                 'E' => waypoint.0 += arg,
+                'W' => waypoint.0 -= arg,
                 'N' => waypoint.1 += arg,
                 'S' => waypoint.1 -= arg,
                 'R' => waypoint = rotate(waypoint, 360 - *arg),
