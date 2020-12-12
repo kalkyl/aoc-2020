@@ -2,7 +2,7 @@ use std::io::{BufRead, BufReader, Error};
 use std::{collections::HashSet, fs::File};
 
 fn instruction_from_str(s: &str) -> Result<(&str, i32), ()> {
-    match s.split(' ').collect::<Vec<_>>().as_slice() {
+    match s.split(' ').collect::<Vec<_>>()[..] {
         [cmd, arg] => Ok((cmd, arg.parse().map_err(|_| ())?)),
         _ => Err(()),
     }
