@@ -16,22 +16,22 @@ fn run(directions: &[(char, i32)]) -> (i32, i32, i32) {
         .fold((0, 0, 0), |(n, e, c), (action, arg)| match action {
             'N' => (n - arg, e, c),
             'S' => (n + arg, e, c),
-            'E' => (n, e + arg, c),
             'W' => (n, e - arg, c),
+            'E' => (n, e + arg, c),
             'L' => (n, e, c - arg),
             'R' => (n, e, c + arg),
-            _ => {
-                let dn = (*arg as f32 * (c as f32 * (PI / 180.)).cos()) as i32;
-                let de = (*arg as f32 * (c as f32 * (PI / 180.)).sin()) as i32;
-                (n + dn, e + de, c)
-            }
+            _ => (
+                n + (*arg as f32 * (c as f32 * (PI / 180.)).cos()) as i32,
+                e + (*arg as f32 * (c as f32 * (PI / 180.)).sin()) as i32,
+                c,
+            ),
         })
 }
 
 fn main() -> Result<(), Error> {
     let directions = BufReader::new(File::open("./input/12.txt")?)
         .lines()
-        .map(|l| l.map(|v| direction_from_string(v)))
+        .map(|l| l.map(direction_from_string))
         .collect::<Result<Vec<_>, _>>()?;
     let (north, east, _) = run(&directions);
     let distance = north.abs() + east.abs();
