@@ -28,7 +28,7 @@ fn run(directions: &[(char, i32)]) -> ((i32, i32), (i32, i32)) {
                 'W' => waypoint.0 -= arg,
                 'N' => waypoint.1 += arg,
                 'S' => waypoint.1 -= arg,
-                'R' => waypoint = rotate(waypoint, 360 - *arg),
+                'R' => waypoint = rotate(waypoint, -arg),
                 'L' => waypoint = rotate(waypoint, *arg),
                 _ => {
                     ship.0 += *arg * waypoint.0;
