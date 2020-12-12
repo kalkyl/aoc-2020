@@ -1,56 +1,39 @@
 use std::io::{BufRead, BufReader, Error};
 use std::{collections::HashSet, fs::File};
 
-fn instruction_from_str(s: &str) -> Result<(&str, i32), ()> {
+fn instruction_from_string(s: String) -> Result<(String, i32), ()> {
     match s.split(' ').collect::<Vec<_>>()[..] {
-        [cmd, arg] => Ok((cmd, arg.parse().map_err(|_| ())?)),
+        [cmd, arg] => Ok((cmd.to_owned(), arg.parse::<i32>().unwrap())),
         _ => Err(()),
     }
 }
 
-fn run_flipped(instructions: &[(&str, i32)], flip_line: usize) -> Result<i32, ()> {
-    let end_state = (0..)
-        .scan(
-            (HashSet::new(), 0, 0),
-            |(executed, line, acc), _| match executed.insert(*line) {
-                true => {
-                    match instructions.get(*line as usize).map(|(cmd, arg)| {
-                        match (*line as usize == flip_line, *cmd) {
-                            (true, "jmp") => ("nop", arg),
-                            (true, "nop") => ("jmp", arg),
-                            _ => (*cmd, arg),
-                        }
-                    }) {
-                        Some((cmd, arg)) => match cmd {
-                            "acc" => {
-                                *acc += arg;
-                                *line += 1;
-                            }
-                            "jmp" => *line += arg,
-                            _ => *line += 1,
-                        },
-                        _ => return None,
-                    }
-                    Some((*line, *acc))
+fn run_flipped(instructions: &[(String, i32)], flip_line: usize) -> Result<i32, ()> {
+    let (mut line, mut acc) = (0i32, 0i32);
+    let mut executed = HashSet::new();
+    while executed.insert(line) {
+        if let Some((cmd, arg)) = instructions.get(line as usize) {
+            match (cmd.as_str(), line as usize == flip_line) {
+                ("jmp", false) | ("nop", true) => line += *arg,
+                ("nop", false) | ("jmp", true) => line += 1,
+                _ => {
+                    acc += *arg;
+                    line += 1;
                 }
-                _ => None,
-            },
-        )
-        .last();
-    match end_state {
-        Some((line, acc)) if line as usize == instructions.len() => Ok(acc),
+            }
+        }
+    }
+    match line as usize == instructions.len() {
+        true => Ok(acc),
         _ => Err(()),
     }
 }
 
 fn main() -> Result<(), Error> {
-    let input = BufReader::new(File::open("./input/8.txt")?)
+    let instructions = BufReader::new(File::open("./input/8.txt")?)
         .lines()
+        .map(|l| l.map(|s| instruction_from_string(s).unwrap()))
         .collect::<Result<Vec<_>, _>>()?;
-    let instructions: Vec<_> = input
-        .iter()
-        .filter_map(|s| instruction_from_str(s).ok())
-        .collect();
     let acc = instructions
         .iter()
         .enumerate()
