@@ -29,32 +29,27 @@ impl Command {
 }
 
 fn addresses(mask: &str, addr: u64) -> Vec<u64> {
-    let mut addresses = vec![String::with_capacity(36)];
+    let mut list = vec![String::with_capacity(36)];
     for (i, bit) in mask.chars().enumerate() {
         match bit {
-            '1' => addresses.iter_mut().for_each(|a| a.push('1')),
-            '0' => addresses.iter_mut().for_each(|a| {
+            '1' => list.iter_mut().for_each(|a| a.push('1')),
+            '0' => list.iter_mut().for_each(|a| {
                 a.push(match addr & (1 << (35 - i)) > 0 {
                     true => '1',
                     _ => '0',
                 })
             }),
             _ => {
-                let n = addresses.len();
+                let n = list.len();
                 for i in 0..n {
-                    addresses.push(addresses[i].clone());
+                    list.push(list[i].clone());
                 }
-                addresses.iter_mut().take(n).for_each(|a| a.push('0'));
-                addresses
-                    .iter_mut()
-                    .skip(n)
-                    .take(n)
-                    .for_each(|a| a.push('1'));
+                list.iter_mut().take(n).for_each(|a| a.push('0'));
+                list.iter_mut().skip(n).take(n).for_each(|a| a.push('1'));
             }
         }
     }
-    addresses
-        .into_iter()
+    list.into_iter()
         .map(|s| u64::from_str_radix(&s, 2).unwrap())
         .collect()
 }
