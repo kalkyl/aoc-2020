@@ -4,7 +4,7 @@ use std::io::{BufRead, BufReader, Error};
 
 enum Command {
     SetMask(String),
-    WriteMem(u64, u64),
+    WriteMem(usize, usize),
 }
 
 impl Command {
@@ -15,7 +15,7 @@ impl Command {
                     .split(" = ")
                     .map(|x| {
                         x.trim_matches(|c: char| !c.is_numeric())
-                            .parse::<u64>()
+                            .parse::<usize>()
                             .unwrap()
                     })
                     .collect::<Vec<_>>()[..]
@@ -29,7 +29,7 @@ impl Command {
     }
 }
 
-fn address_variants(mask: &str, addr: u64) -> HashSet<u64> {
+fn address_variants(mask: &str, addr: usize) -> HashSet<usize> {
     let mut list = vec![String::with_capacity(36)];
     for (i, bit) in mask.chars().enumerate() {
         match bit {
@@ -51,7 +51,7 @@ fn address_variants(mask: &str, addr: u64) -> HashSet<u64> {
         }
     }
     list.into_iter()
-        .map(|s| u64::from_str_radix(&s, 2).unwrap())
+        .map(|s| usize::from_str_radix(&s, 2).unwrap())
         .collect()
 }
 
@@ -74,7 +74,7 @@ fn main() -> Result<(), Error> {
             (mask, mem)
         },
     );
-    let sum: u64 = mem.values().sum();
+    let sum: usize = mem.values().sum();
     println!("{}", sum);
     Ok(())
 }
