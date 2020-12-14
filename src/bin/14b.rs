@@ -1,5 +1,6 @@
+use std::collections::{HashMap, HashSet};
+use std::fs::File;
 use std::io::{BufRead, BufReader, Error};
-use std::{collections::HashMap, fs::File};
 
 enum Command {
     SetMask(String),
@@ -28,7 +29,7 @@ impl Command {
     }
 }
 
-fn addresses(mask: &str, addr: u64) -> Vec<u64> {
+fn address_variants(mask: &str, addr: u64) -> HashSet<u64> {
     let mut list = vec![String::with_capacity(36)];
     for (i, bit) in mask.chars().enumerate() {
         match bit {
@@ -65,7 +66,7 @@ fn main() -> Result<(), Error> {
             match cmd {
                 Command::SetMask(m) => mask.clone_from(m),
                 Command::WriteMem(addr, value) => {
-                    for a in addresses(&mask, *addr) {
+                    for a in address_variants(&mask, *addr) {
                         mem.insert(a, *value);
                     }
                 }
