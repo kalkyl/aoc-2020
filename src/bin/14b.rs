@@ -32,28 +32,24 @@ fn addresses(mask: &str, addr: u64) -> Vec<u64> {
     let mut addresses = vec![String::with_capacity(36)];
     for (i, bit) in mask.chars().enumerate() {
         match bit {
-            '1' => {
-                for s in addresses.iter_mut() {
-                    s.push('1');
-                }
-            }
-            '0' => {
-                let c = if addr & (1 << (35 - i)) > 0 { '1' } else { '0' };
-                for s in addresses.iter_mut() {
-                    s.push(c)
-                }
-            }
+            '1' => addresses.iter_mut().for_each(|a| a.push('1')),
+            '0' => addresses.iter_mut().for_each(|a| {
+                a.push(match addr & (1 << (35 - i)) > 0 {
+                    true => '1',
+                    _ => '0',
+                })
+            }),
             _ => {
                 let n = addresses.len();
                 for i in 0..n {
                     addresses.push(addresses[i].clone());
                 }
-                for i in 0..n {
-                    addresses[i].push('0');
-                }
-                for i in n..(2 * n) {
-                    addresses[i].push('1');
-                }
+                addresses.iter_mut().take(n).for_each(|a| a.push('0'));
+                addresses
+                    .iter_mut()
+                    .skip(n)
+                    .take(n)
+                    .for_each(|a| a.push('1'));
             }
         }
     }
@@ -82,7 +78,7 @@ fn main() -> Result<(), Error> {
             (mask, mem)
         },
     );
-    let sum = mem.values().fold(0, |sum, v| sum + *v);
+    let sum: u64 = mem.values().sum();
     println!("{}", sum);
     Ok(())
 }
