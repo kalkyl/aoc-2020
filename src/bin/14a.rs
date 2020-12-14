@@ -3,7 +3,7 @@ use std::{collections::HashMap, fs::File};
 
 enum Command {
     SetMask(String),
-    WriteMem(usize, i64),
+    WriteMem(usize, usize),
 }
 
 impl Command {
@@ -14,7 +14,7 @@ impl Command {
                     .split(" = ")
                     .map(|x| {
                         x.trim_matches(|c: char| !c.is_numeric())
-                            .parse::<i64>()
+                            .parse::<usize>()
                             .unwrap()
                     })
                     .collect::<Vec<_>>()[..]
@@ -28,9 +28,9 @@ impl Command {
     }
 }
 
-fn apply_mask(mask: &str, value: i64) -> i64 {
-    value & i64::from_str_radix(&mask.replace('X', "1"), 2).unwrap()
-        | i64::from_str_radix(&mask.replace('X', "0"), 2).unwrap()
+fn apply_mask(mask: &str, value: usize) -> usize {
+    value & usize::from_str_radix(&mask.replace('X', "1"), 2).unwrap()
+        | usize::from_str_radix(&mask.replace('X', "0"), 2).unwrap()
 }
 
 fn main() -> Result<(), Error> {
@@ -50,7 +50,7 @@ fn main() -> Result<(), Error> {
             (mask, mem)
         },
     );
-    let sum = mem.values().fold(0, |sum, v| sum + *v);
+    let sum: usize = mem.values().sum();
     println!("{}", sum);
     Ok(())
 }
