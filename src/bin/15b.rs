@@ -10,7 +10,7 @@ fn main() {
             p => i - p,
         };
         mem[prev] = i;
-        let _ = std::mem::replace(&mut prev, current);
+        prev = current;
     }
     println!("{}", prev);
 }
