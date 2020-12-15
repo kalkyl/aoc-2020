@@ -4,7 +4,7 @@ fn main() {
     let input = vec![9, 3, 1, 0, 8, 4];
     let mut mem: HashMap<_, _> = input.iter().enumerate().map(|(i, x)| (*x, i)).collect();
     let mut prev = *input.get(input.len() - 1).unwrap();
-    for i in input.len()..2020 {
+    for i in input.len()..30000000 {
         let current = match mem.get(&prev) {
             Some(p) => i - 1 - p,
             _ => 0,
