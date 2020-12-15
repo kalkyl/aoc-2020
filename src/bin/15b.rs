@@ -1,16 +1,16 @@
-use std::collections::HashMap;
-
 fn main() {
     let input = vec![9, 3, 1, 0, 8, 4];
-    let mut mem: HashMap<_, _> = input.iter().enumerate().map(|(i, x)| (*x, i)).collect();
-    let mut prev = *input.get(input.len() - 1).unwrap();
-    for i in input.len()..30000000 {
-        let current = match mem.get(&prev) {
-            Some(p) => i - 1 - p,
-            _ => 0,
+    const N: usize = 30000000;
+    let mut mem = vec![0; N];
+    input.iter().enumerate().for_each(|(i, x)| mem[*x] = i + 1);
+    let mut prev = *input.last().unwrap();
+    for i in input.len()..N {
+        let current = match mem[prev] {
+            0 => 0,
+            p => i - p,
         };
-        mem.insert(prev, i - 1);
-        prev = current;
+        mem[prev] = i;
+        let _ = std::mem::replace(&mut prev, current);
     }
     println!("{}", prev);
 }
